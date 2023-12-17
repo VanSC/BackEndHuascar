@@ -62,9 +62,10 @@ const listarRegistrosVehiculo = async (req, res) => {
         u.nombre AS nombreUsuario,
         tv.tipo AS tipoVehiculo
       FROM
+      
         registroVehiculo r
       JOIN
-        usuario u ON r.idUsuario = u.idUsuario
+        usuario u ON r.idUsuario = u.id
       JOIN
         tiposvehiculos tv ON r.idTipoVehiculo = tv.idTipoVehiculo
     `);

@@ -3,89 +3,88 @@ const bcrypt = require('bcryptjs');
 
 
 const addUsuario = async (req, res) => {
-    try {
-        const { nombre, apellido, dni, telefono, genero, fechaNacimiento, contraseña, idRol } = req.body;
+  try {
+    const { nombre, apellido, dni, telefono, genero, fechaNacimiento, contraseña, idRol } = req.body;
 
-        if (nombre === undefined || apellido === undefined || dni === undefined ||
-            telefono === undefined || genero === undefined || fechaNacimiento === undefined ||
-            contraseña === undefined || idRol === undefined) {
-            res.status(400).json({ "message": "Bad Request. Please fill all fields." });
-            return;
-        }
+    if (nombre === undefined || apellido === undefined || dni === undefined ||
+      telefono === undefined || genero === undefined || fechaNacimiento === undefined ||
+      contraseña === undefined || idRol === undefined) {
+      res.status(400).json({ "message": "Bad Request. Please fill all fields." });
+      return;
+    }
 
-        // Generar el hash de la contraseña
-        const hashedPassword = await bcrypt.hash(contraseña, 10);
+    // Generar el hash de la contraseña
+    const hashedPassword = await bcrypt.hash(contraseña, 10);
 
-        const connection = await conectar();
-        const result = await connection.query(`
+    const connection = await conectar();
+    const result = await connection.query(`
             INSERT INTO usuario (nombre, apellido, dni, telefono, genero, fechaNacimiento, contraseña, idRol) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-            [nombre, apellido, dni, telefono, genero, fechaNacimiento, hashedPassword, idRol]
-        );
+      [nombre, apellido, dni, telefono, genero, fechaNacimiento, hashedPassword, idRol]
+    );
 
-        res.json({ "message": "Usuario Registrado Correctamente" });
+    res.json({ "message": "Usuario Registrado Correctamente" });
 
-    } catch (error) {
-        res.status(500);
-        res.send(error.message);
-    }
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
 };
 
 const getUsuarioByDNI = async (req, res) => {
-    try {
-        const { dni } = req.params;
-        const connection = await conectar();
-        const result = await connection.query("SELECT * FROM usuario WHERE dni = ?", dni);
+  try {
+    const { dni } = req.params;
+    const connection = await conectar();
+    const result = await connection.query("SELECT * FROM usuario WHERE dni = ?", dni);
 
-        if (result[0].length === 0) {
-            res.status(404).json({ "message": "Usuario no encontrado" });
-        } else {
-            res.json(result[0]);
-        }
-    } catch (error) {
-        res.status(500);
-        res.send(error.message);
+    if (result[0].length === 0) {
+      res.status(404).json({ "message": "Usuario no encontrado" });
+    } else {
+      res.json(result[0]);
     }
+  } catch (error) {
+    res.status(500);
+    res.send(error.message);
+  }
 };
 
 const login = async (req, res) => {
-    try {
-      const { dni, contraseña } = req.body;
-  
-      const connection = await conectar();
-  
-      try {
+  let connection;
 
-        const [rows] = await connection.query('SELECT * FROM usuario WHERE dni = ?', [dni]);
-  
-        if (rows.length === 0) {
-          res.status(404).json({ "message": "Usuario no encontrado" });
-          return;
-        }
-  
-        const usuario = rows[0];
-  
-        const match = await bcrypt.compare(contraseña, usuario.contraseña);
-  
-        if (match) {
-          res.json({ "message": "Inicio de sesión exitoso", usuario });
-        } else {
-          res.status(401).json({ "message": "Credenciales inválidas" });
-        }
-      } catch (error) {
-        console.error('Error en la consulta:', error);
-        res.status(500).send('Error interno del servidor');
-      } finally {
-        connection.release();
+  try {
+    const { dni, contraseña } = req.body;
+    connection = await conectar();
+
+    try {
+      const [rows] = await connection.query('SELECT * FROM usuario WHERE dni = ?', [dni]);
+
+      if (rows.length === 0) {
+        res.status(404).json({ "message": "Usuario no encontrado" });
+        return;
+      }
+
+      const usuario = rows[0];
+
+      const match = await bcrypt.compare(contraseña, usuario.contraseña);
+
+      if (match) {
+        res.json({ "message": "Inicio de sesión exitoso", usuario });
+      } else {
+        res.status(401).json({ "message": "Credenciales inválidas" });
       }
     } catch (error) {
-      console.error('Error al conectar a la base de datos:', error);
+      console.error('Error en la consulta:', error);
       res.status(500).send('Error interno del servidor');
     }
+  } catch (error) {
+    console.error('Error al conectar a la base de datos:', error);
+    res.status(500).send('Error interno del servidor');
   }
+};
+
 
 export const methods = {
-    addUsuario,
-    getUsuarioByDNI,
-    login
+  addUsuario,
+  getUsuarioByDNI,
+  login
 };

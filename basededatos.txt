@@ -10,12 +10,14 @@ INSERT INTO rol_usuarios (tipoRol) VALUES ('administrador');
 
 -- Crear el rol "trabajador"
 INSERT INTO rol_usuarios (tipoRol) VALUES ('trabajador');
+
 CREATE TABLE IF NOT EXISTS usuario (
 	id INT primary KEY AUTO_INCREMENT,
 	nombre VARCHAR(50),
 	apellido VARCHAR(60),
 	dni VARCHAR(8),
 	telefono VARCHAR(9),
+	genero VARCHAR(20),
 	fechaNacimiento DATE,
 	contraseña VARCHAR(12),
 	idRol INT,
@@ -35,6 +37,7 @@ CREATE TABLE IF NOT EXISTS tiposvehiculos (
     cargaMax DOUBLE(7,2),
     precio DOUBLE(7,2)
 );
+
 
 CREATE TABLE IF NOT EXISTS Factura (
   idFactura INT PRIMARY KEY AUTO_INCREMENT,
@@ -119,3 +122,27 @@ CREATE TABLE IF NOT EXISTS registroVehiculo (
 SELECT * FROM registrovehiculo
 SELECT * FROM tiposvehiculos
 SELECT * FROM usuario
+
+
+-- Registro 1
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio,cargaUtil, idUsuario, idTipoVehiculo)
+VALUES ('ABC123', '2023-12-14', '12:30:00', 15000.00, 16450,2, 1);
+
+-- Registro 2
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('XYZ789', '2023-12-15', '14:45:00', 18000.00, 2, 2, 1);
+
+-- Registro 3
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('DEF456', '2023-12-16', '09:30:00', 20000.00, 2, 1, 1);
+
+-- Registro 4
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('GHI789', '2023-12-17', '11:15:00', 22000.00, 2, 2, 1);
+
+-- Registro 5
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('JKL012', '2023-12-18', '13:00:00', 25000.00, 2, 3, 1);
+
+
+SELECT * FROM tiposvehiculos

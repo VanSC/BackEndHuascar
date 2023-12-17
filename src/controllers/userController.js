@@ -4,10 +4,10 @@ const bcrypt = require('bcryptjs');
 
 const addUsuario = async (req, res) => {
     try {
-        const { nombre, apellido, dni, telefono, fechaNacimiento, contraseña, idRol } = req.body;
+        const { nombre, apellido, dni, telefono, genero, fechaNacimiento, contraseña, idRol } = req.body;
 
         if (nombre === undefined || apellido === undefined || dni === undefined ||
-            telefono === undefined || fechaNacimiento === undefined ||
+            telefono === undefined || genero === undefined || fechaNacimiento === undefined ||
             contraseña === undefined || idRol === undefined) {
             res.status(400).json({ "message": "Bad Request. Please fill all fields." });
             return;
@@ -18,9 +18,9 @@ const addUsuario = async (req, res) => {
 
         const connection = await conectar();
         const result = await connection.query(`
-            INSERT INTO usuario (nombre, apellido, dni, telefono, fechaNacimiento, contraseña, idRol) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)`,
-            [nombre, apellido, dni, telefono, fechaNacimiento, hashedPassword, idRol]
+            INSERT INTO usuario (nombre, apellido, dni, telefono, genero, fechaNacimiento, contraseña, idRol) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [nombre, apellido, dni, telefono, genero, fechaNacimiento, hashedPassword, idRol]
         );
 
         res.json({ "message": "Usuario Registrado Correctamente" });
@@ -52,11 +52,10 @@ const login = async (req, res) => {
     try {
       const { dni, contraseña } = req.body;
   
-      // Obtener la conexión desde el pool
-      const connection = await pool.getConnection();
+      const connection = await conectar();
   
       try {
-        // Consultar el usuario por DNI
+
         const [rows] = await connection.query('SELECT * FROM usuario WHERE dni = ?', [dni]);
   
         if (rows.length === 0) {
@@ -66,7 +65,6 @@ const login = async (req, res) => {
   
         const usuario = rows[0];
   
-        // Comparar la contraseña proporcionada con el hash almacenado
         const match = await bcrypt.compare(contraseña, usuario.contraseña);
   
         if (match) {
@@ -78,7 +76,7 @@ const login = async (req, res) => {
         console.error('Error en la consulta:', error);
         res.status(500).send('Error interno del servidor');
       } finally {
-        connection.release(); // Liberar la conexión después de usarla
+        connection.release();
       }
     } catch (error) {
       console.error('Error al conectar a la base de datos:', error);

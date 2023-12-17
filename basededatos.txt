@@ -1,0 +1,167 @@
+CREATE DATABASE empresahuascar
+USE empresahuascar
+
+CREATE TABLE IF NOT EXISTS rol_usuarios (
+	idRol INT PRIMARY KEY AUTO_INCREMENT,
+	tipoRol VARCHAR(10)
+)
+
+-- Crear el rol "administrador"
+INSERT INTO rol_usuarios (tipoRol) VALUES ('administrador');
+
+-- Crear el rol "trabajador"
+INSERT INTO rol_usuarios (tipoRol) VALUES ('trabajador');
+
+-- Crear un usuario administrador
+INSERT INTO usuario (nombre, apellido, dni, telefono, fechaNacimeinto, contraseña, idRol)
+VALUES ('Admin', 'Apellido', '12345678', '987654321', '1990-01-15', 'clave123', 1);
+
+-- Crear un usuario trabajador
+INSERT INTO usuario (nombre, apellido, dni, telefono, fechaNacimeinto, contraseña, idRol)
+VALUES ('Trabajador', 'Apellido', '87654321', '123456789', '1995-05-20', 'clave456', 2);
+
+
+CREATE TABLE IF NOT EXISTS usuario (
+	idUsuario INT primary KEY AUTO_INCREMENT,
+	nombre VARCHAR(50),
+	apellido VARCHAR(60),
+	dni VARCHAR(8),
+	telefono VARCHAR(9),
+	fechaNacimeinto DATE,
+	contraseña VARCHAR(12),
+	idRol INT,
+	FOREIGN KEY (idRol) REFERENCES rol_usuarios(idRol)
+)
+
+SELECT * FROM usuario 
+CREATE TABLE IF NOT EXISTS tiposvehiculos (
+    idTipoVehiculo INT PRIMARY KEY AUTO_INCREMENT,
+    tipo VARCHAR(50),
+    categoria VARCHAR(20),
+    pesoMin DOUBLE(7,2),
+    pesoMax DOUBLE(7,2),
+    precio DOUBLE(7,2)
+);
+
+-- Añadir las nuevas columnas
+-- ALTER TABLE tiposvehiculos
+-- ADD COLUMN pesoMin DOUBLE(7,2),
+-- ADD COLUMN pesoMax DOUBLE(7,2);
+-- ALTER TABLE tiposvehiculos DROP COLUMN peso;
+-- Eliminar la columna peso, si es necesario
+-- ALTER TABLE tiposvehiculos DROP COLUMN peso;
+SELECT * FROM tiposvehiculos
+-- Insertar datos
+-- Insertar datos
+INSERT INTO tiposvehiculos (tipo, categoria, pesoMin, pesoMax, precio) VALUES
+    ('Camión 4TM', 'Camión', 0.00, 4000.00, 10000.00),
+    ('Camión 8TM', 'Camión', 4001.00, 8000.00, 15000.00),
+    ('Doble/Triple eje', 'Camión', 8001.00, 12000.00, 20000.00),
+    ('Semitrailer', 'Camión', 12001.00, 20000.00, 25000.00),
+    ('Carreta', 'Camión', 20001.00, 30000.00, 30000.00),
+    ('Bus', 'Pasajero', 0.00, 10000.00, 12000.00);
+
+
+CREATE TABLE IF NOT EXISTS Factura (
+  idFactura INT PRIMARY KEY AUTO_INCREMENT,
+  numeroFactura VARCHAR(20) NOT NULL,
+  fechaEmision DATE NOT NULL,
+  fechaVencimiento DATE,
+  tipoDocumentoIdentidadCliente VARCHAR(10) NOT NULL,
+  numeroDocumentoIdentidadCliente VARCHAR(15) NOT NULL,
+  nombreRazonSocialCliente VARCHAR(100) NOT NULL,
+  direccionCliente VARCHAR(255),
+  descripcionBienesServicios TEXT NOT NULL,
+  cantidad INT NOT NULL,
+  precioUnitario DECIMAL(10, 2) NOT NULL,
+  subtotal DECIMAL(10, 2) NOT NULL,
+  igv DECIMAL(10, 2) NOT NULL,
+  total DECIMAL(10, 2) NOT NULL,
+  moneda VARCHAR(3) NOT NULL,
+  datosEmisor VARCHAR(255) NOT NULL,
+  datosCliente VARCHAR(255) NOT NULL,
+  condicionesPago VARCHAR(50),
+  codigoProductoServicio VARCHAR(20)
+);
+
+-- insett
+INSERT INTO Factura (
+    numeroFactura, 
+    fechaEmision, 
+    fechaVencimiento, 
+    tipoDocumentoIdentidadCliente, 
+    numeroDocumentoIdentidadCliente, 
+    nombreRazonSocialCliente, 
+    direccionCliente, 
+    descripcionBienesServicios, 
+    cantidad, 
+    precioUnitario, 
+    subtotal, 
+    igv, 
+    total, 
+    moneda, 
+    datosEmisor, 
+    datosCliente, 
+    condicionesPago, 
+    codigoProductoServicio
+)
+VALUES (
+    'F2023001', -- Número de factura ficticio
+    '2023-12-14', -- Fecha de emisión ficticia
+    '2024-01-14', -- Fecha de vencimiento ficticia
+    'RUC', -- Tipo de documento de identidad del cliente
+    '123456789', -- Número de documento de identidad del cliente
+    'Cliente XYZ', -- Nombre o razón social del cliente
+    'Dirección del Cliente XYZ', -- Dirección del cliente
+    'Venta de Vehículos', -- Descripción de bienes/servicios
+    5, -- Cantidad de vehículos
+    20000.00, -- Precio unitario ficticio
+    100000.00, -- Subtotal ficticio
+    18000.00, -- IGV ficticio (18% del subtotal)
+    118000.00, -- Total ficticio
+    'USD', -- Moneda ficticia
+    'Datos del Emisor XYZ', -- Datos del emisor ficticio
+    'Datos del Cliente XYZ', -- Datos del cliente ficticio
+    'Pago en 30 días', -- Condiciones de pago ficticias
+    'VEH001' -- Código de producto/servicio ficticio
+);
+
+
+CREATE TABLE IF NOT EXISTS registroVehiculo (
+  idRegistro INT PRIMARY KEY AUTO_INCREMENT,
+  placa VARCHAR(7),
+  fechaRegistro DATE,
+  horaRegistro TIME,
+  precio DOUBLE(7,2),
+  idUsuario INT,
+  idTipoVehiculo INT,
+  idFactura INT,
+  FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario),
+  FOREIGN KEY (idTipoVehiculo) REFERENCES tiposvehiculos(idTipoVehiculo),
+  FOREIGN KEY (idFactura) REFERENCES Factura(idFactura)
+);
+
+-- ALTER TABLE registroVehiculo
+-- ADD COLUMN precio DOUBLE(7,2)
+SELECT * FROM registroVehiculo
+
+
+-- Registro 1
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('ABC123', '2023-12-14', '12:30:00', 15000.00, 2, 1, 1);
+
+-- Registro 2
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('XYZ789', '2023-12-15', '14:45:00', 18000.00, 2, 2, 1);
+
+-- Registro 3
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('DEF456', '2023-12-16', '09:30:00', 20000.00, 2, 1, 1);
+
+-- Registro 4
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('GHI789', '2023-12-17', '11:15:00', 22000.00, 2, 2, 1);
+
+-- Registro 5
+INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
+VALUES ('JKL012', '2023-12-18', '13:00:00', 25000.00, 2, 3, 1);

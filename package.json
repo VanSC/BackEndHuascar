@@ -1,0 +1,36 @@
+{
+  "name": "backendproject",
+  "version": "1.0.0",
+  "description": "este es el codigo fuente de la parte logica del proyecto",
+  "main": "index.js",
+  "scripts": {
+    "babel-node": "babel-node --presets=@babel/preset-env",
+    "dev": "nodemon --exec node -r @babel/register src/index.js",
+    "start": "node src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "author": "Vanessa Choque y Jhoselin Ponce",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.23.4",
+    "@babel/core": "^7.23.6",
+    "@babel/node": "^7.22.19",
+    "@babel/preset-env": "^7.23.6",
+    "@babel/register": "^7.22.15",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.6.5",
+    "nodemon": "^3.0.2",
+    "pdfkit": "^0.14.0",
+    "tesseract.js": "^5.0.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

@@ -1,0 +1,4 @@
+peso net®: 12.000
+carga util: 18.000
+peso bruto: 30.000
+m.t.c: 152020044

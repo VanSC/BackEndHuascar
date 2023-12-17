@@ -5,62 +5,36 @@ CREATE TABLE IF NOT EXISTS rol_usuarios (
 	idRol INT PRIMARY KEY AUTO_INCREMENT,
 	tipoRol VARCHAR(10)
 )
-
 -- Crear el rol "administrador"
 INSERT INTO rol_usuarios (tipoRol) VALUES ('administrador');
 
 -- Crear el rol "trabajador"
 INSERT INTO rol_usuarios (tipoRol) VALUES ('trabajador');
-
--- Crear un usuario administrador
-INSERT INTO usuario (nombre, apellido, dni, telefono, fechaNacimeinto, contraseña, idRol)
-VALUES ('Admin', 'Apellido', '12345678', '987654321', '1990-01-15', 'clave123', 1);
-
--- Crear un usuario trabajador
-INSERT INTO usuario (nombre, apellido, dni, telefono, fechaNacimeinto, contraseña, idRol)
-VALUES ('Trabajador', 'Apellido', '87654321', '123456789', '1995-05-20', 'clave456', 2);
-
-
 CREATE TABLE IF NOT EXISTS usuario (
-	idUsuario INT primary KEY AUTO_INCREMENT,
+	id INT primary KEY AUTO_INCREMENT,
 	nombre VARCHAR(50),
 	apellido VARCHAR(60),
 	dni VARCHAR(8),
 	telefono VARCHAR(9),
-	fechaNacimeinto DATE,
+	fechaNacimiento DATE,
 	contraseña VARCHAR(12),
 	idRol INT,
 	FOREIGN KEY (idRol) REFERENCES rol_usuarios(idRol)
 )
 
-SELECT * FROM usuario 
+INSERT INTO usuario (nombre, apellido, dni, telefono, fechaNacimiento, contraseña, idRol)
+VALUES ('Vanessa', 'Choque', '12345678', '987654321', '1990-01-01', '1234', 1);
+
+
+SELECT * FROM rol_usuarios 
+
 CREATE TABLE IF NOT EXISTS tiposvehiculos (
     idTipoVehiculo INT PRIMARY KEY AUTO_INCREMENT,
     tipo VARCHAR(50),
-    categoria VARCHAR(20),
-    pesoMin DOUBLE(7,2),
-    pesoMax DOUBLE(7,2),
+    cargaMin DOUBLE(7,2),
+    cargaMax DOUBLE(7,2),
     precio DOUBLE(7,2)
 );
-
--- Añadir las nuevas columnas
--- ALTER TABLE tiposvehiculos
--- ADD COLUMN pesoMin DOUBLE(7,2),
--- ADD COLUMN pesoMax DOUBLE(7,2);
--- ALTER TABLE tiposvehiculos DROP COLUMN peso;
--- Eliminar la columna peso, si es necesario
--- ALTER TABLE tiposvehiculos DROP COLUMN peso;
-SELECT * FROM tiposvehiculos
--- Insertar datos
--- Insertar datos
-INSERT INTO tiposvehiculos (tipo, categoria, pesoMin, pesoMax, precio) VALUES
-    ('Camión 4TM', 'Camión', 0.00, 4000.00, 10000.00),
-    ('Camión 8TM', 'Camión', 4001.00, 8000.00, 15000.00),
-    ('Doble/Triple eje', 'Camión', 8001.00, 12000.00, 20000.00),
-    ('Semitrailer', 'Camión', 12001.00, 20000.00, 25000.00),
-    ('Carreta', 'Camión', 20001.00, 30000.00, 30000.00),
-    ('Bus', 'Pasajero', 0.00, 10000.00, 12000.00);
-
 
 CREATE TABLE IF NOT EXISTS Factura (
   idFactura INT PRIMARY KEY AUTO_INCREMENT,
@@ -132,36 +106,16 @@ CREATE TABLE IF NOT EXISTS registroVehiculo (
   placa VARCHAR(7),
   fechaRegistro DATE,
   horaRegistro TIME,
-  precio DOUBLE(7,2),
+  precio DOUBLE(8,2),
+  cargaUtil DOUBLE(8,2),
   idUsuario INT,
   idTipoVehiculo INT,
-  idFactura INT,
-  FOREIGN KEY (idUsuario) REFERENCES usuario(idUsuario),
-  FOREIGN KEY (idTipoVehiculo) REFERENCES tiposvehiculos(idTipoVehiculo),
-  FOREIGN KEY (idFactura) REFERENCES Factura(idFactura)
+  FOREIGN KEY (idUsuario) REFERENCES usuario(id),
+  FOREIGN KEY (idTipoVehiculo) REFERENCES tiposvehiculos(idTipoVehiculo)
 );
 
 -- ALTER TABLE registroVehiculo
 -- ADD COLUMN precio DOUBLE(7,2)
-SELECT * FROM registroVehiculo
-
-
--- Registro 1
-INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
-VALUES ('ABC123', '2023-12-14', '12:30:00', 15000.00, 2, 1, 1);
-
--- Registro 2
-INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
-VALUES ('XYZ789', '2023-12-15', '14:45:00', 18000.00, 2, 2, 1);
-
--- Registro 3
-INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
-VALUES ('DEF456', '2023-12-16', '09:30:00', 20000.00, 2, 1, 1);
-
--- Registro 4
-INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
-VALUES ('GHI789', '2023-12-17', '11:15:00', 22000.00, 2, 2, 1);
-
--- Registro 5
-INSERT INTO registroVehiculo (placa, fechaRegistro, horaRegistro, precio, idUsuario, idTipoVehiculo, idFactura)
-VALUES ('JKL012', '2023-12-18', '13:00:00', 25000.00, 2, 3, 1);
+SELECT * FROM registrovehiculo
+SELECT * FROM tiposvehiculos
+SELECT * FROM usuario

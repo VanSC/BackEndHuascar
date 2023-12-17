@@ -1,0 +1,35 @@
+registro idTipoVehiculo
+
+http://localhost:3000/api/registrarvehiculo
+{
+  "placa": "AQR-LI7",
+  "imagenPath": "C:\\Users\\Vane\\Documents\\TESIS\\pruebaimg.jpg",
+  "idUsuario": 2
+}
+
+listado registroa vehiculo
+
+http://localhost:3000/api/registros
+
+registro usuario:
+
+http://localhost:3000/api/adduser
+{
+  "nombre": "Jusd",
+  "apellido": "Pérez",
+  "dni": "23456789",
+  "telefono": "123456789",
+  "genero": "masculino",
+  "fechaNacimiento": "1990-01-01",
+  "contraseña": "123",
+  "idRol": 2
+}
+
+
+login:
+
+http://localhost:3000/api/login
+{
+  "dni": "23456789",
+  "contraseña": "123"
+}

@@ -38,6 +38,12 @@ CREATE TABLE IF NOT EXISTS tiposvehiculos (
     precio DOUBLE(7,2)
 );
 
+INSERT INTO tiposvehiculos (tipo, cargaMin, cargaMax, precio) VALUES
+    ('Camión 4TM', 4000.00, 6500.00, 60.00),
+    ('Camión 8TM', 6501.00, 10000.00, 80.00),
+    ('Doble/Triple eje', 15000, 16500.00, 100),
+    ('Semitrailer',16501.00, 17500.00, 130.00),
+    ('Carreta', 17501.00, 19000.00, 150.00)
 
 CREATE TABLE IF NOT EXISTS Factura (
   idFactura INT PRIMARY KEY AUTO_INCREMENT,

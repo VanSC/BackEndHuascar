@@ -4,6 +4,7 @@ import morgan from "morgan";
 import registroRoutes from "./routes/registro.routes";
 import userRoutes from "./routes/user.routes";
 import reporteRoutes from "./routes/reporte.routes";
+import tiposRoutes from "./routes/tipoVehiculo.route";
 const cors = require('cors');
 const app = express();
 
@@ -23,5 +24,6 @@ app.use((err, req, res, next) => {
 app.use(registroRoutes);
 app.use(userRoutes);
 app.use(reporteRoutes);
+app.use(tiposRoutes);
 
 export default app;

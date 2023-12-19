@@ -1,6 +1,7 @@
 import { conectar } from "../database/database";
 const bcrypt = require('bcryptjs');
-
+const jwt = require('jsonwebtoken');
+import config from '../config/config';
 
 const addUsuario = async (req, res) => {
   try {
@@ -68,7 +69,14 @@ const login = async (req, res) => {
       const match = await bcrypt.compare(contraseña, usuario.contraseña);
 
       if (match) {
-        res.json({ "message": "Inicio de sesión exitoso", usuario });
+        const token = jwt.sign(
+          { userId: usuario.id, dni: usuario.dni },
+          config.secret,
+          { expiresIn: '1h' } 
+        );
+
+        // Enviar el token en la respuesta
+        res.json({ "message": "Inicio de sesión exitoso", token, usuario });
       } else {
         res.status(401).json({ "message": "Credenciales inválidas" });
       }

@@ -193,18 +193,41 @@ const contarRegistrosPorSemana = async (req, res) => {
     const connection = await conectar();
     const result = await connection.query(`
       SELECT
-        WEEK(r.fechaRegistro) AS semana,
         COUNT(*) AS cantidadRegistros
       FROM
         registroVehiculo r
+      WHERE
+        WEEK(r.fechaRegistro) = WEEK(CURDATE())
       GROUP BY
         WEEK(r.fechaRegistro)
     `);
-
     const registrosPorSemana = result[0];
     res.json(registrosPorSemana);
   } catch (error) {
     console.error('Error al contar la cantidad de registros por semana:', error);
+    res.status(500).send(error.message);
+  }
+};
+
+const contarRegistrosPorMes = async (req, res) => {
+  try {
+    const connection = await conectar();
+    const result = await connection.query(`
+      SELECT
+        MONTH(r.fechaRegistro) AS mes,
+        COUNT(*) AS cantidadRegistros
+      FROM
+        registroVehiculo r
+      WHERE
+        MONTH(r.fechaRegistro) = MONTH(CURDATE())
+      GROUP BY
+        MONTH(r.fechaRegistro)
+    `);
+
+    const registrosPorMes = result[0];
+    res.json(registrosPorMes);
+  } catch (error) {
+    console.error('Error al contar la cantidad de registros por mes:', error);
     res.status(500).send(error.message);
   }
 };
@@ -286,5 +309,6 @@ export const methods = {
   contarRegistrosPorSemana,
   contarRegistrosPorTipo,
   filtrarRegistros,
-  listarRegistrosVehiculofecha
+  listarRegistrosVehiculofecha,
+  contarRegistrosPorMes
 };

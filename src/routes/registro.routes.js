@@ -12,5 +12,9 @@ router.get('/api/preciototaldeldia', registroController.sumarPrecioTotalPorFecha
 router.get('/api/contarporsemana', registroController.sumarPrecioTotalPorSemana)
 router.get("/api/cantidadtipo", registroController.contarRegistrosPorTipo);
 router.post("/api/filtroregistro", registroController.filtrarRegistros);
-router.get('/api/ordenarporhora', registroController.listarRegistrosVehiculofecha)
+router.get('/api/ordenarporhora', registroController.listarRegistrosVehiculofecha);
+router.get("/api/registrossemanales", registroController.contarRegistrosPorSemana);
+router.get("/api/registrosmensuales", registroController.contarRegistrosPorMes);
+
+
 export default router;
